@@ -27,7 +27,25 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
     s_info->temp_k = (int16_t)temp_tuple->value->int32;
     s_info->temp_c = s_info->temp_k - 273;
     s_info->temp_f = ((s_info->temp_c * 9) / 5 /* *1.8 or 9/5 */) + 32;
+
+    Tuple *feels_like_tuple = dict_find(iter, MESSAGE_KEY_GW_FEELSLIKEK);
+    s_info->temp_feels_like_k = (int16_t)feels_like_tuple->value->int32;
+    s_info->temp_feels_like_c = s_info->temp_feels_like_k - 273;
+    s_info->temp_feels_like_f = ((s_info->temp_feels_like_c * 9) / 5 /* *1.8 or 9/5 */) + 32;
+
+    Tuple *temp_low_tuple = dict_find(iter, MESSAGE_KEY_GW_TEMP_LOWK);
+    s_info->temp_low_k = (int16_t)temp_low_tuple->value->int32;
+    s_info->temp_low_c = s_info->temp_low_k - 273;
+    s_info->temp_low_f = ((s_info->temp_low_c * 9) / 5 /* *1.8 or 9/5 */) + 32;
+
+    Tuple *temp_high_tuple = dict_find(iter, MESSAGE_KEY_GW_TEMP_HIGHK);
+    s_info->temp_high_k = (int16_t)temp_high_tuple->value->int32;
+    s_info->temp_high_c = s_info->temp_high_k - 273;
+    s_info->temp_high_f = ((s_info->temp_high_c * 9) / 5 /* *1.8 or 9/5 */) + 32;
     s_info->timestamp = time(NULL);
+
+    Tuple *humidity_tuple = dict_find(iter, MESSAGE_KEY_GW_HUMIDITY);
+    s_info->humidity = (uint8_t)humidity_tuple->value->uint8;
 
     Tuple *day_tuple = dict_find(iter, MESSAGE_KEY_GW_DAY);
     s_info->day = day_tuple->value->int32 == 1;

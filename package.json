@@ -14,8 +14,7 @@
     "url": "https://github.com/gregoiresage/pebble-generic-weather"
   },
   "dependencies": {
-    "pebble-events": "^1.0.0",
-    "suncalc": "^1.7.0"
+    "pebble-events": "^1.2.0"
   },
   "pebble": {
     "projectType": "package",
@@ -43,6 +42,10 @@
       "GW_DESCRIPTION",
       "GW_NAME",
       "GW_TEMPK",
+      "GW_FEELSLIKEK",
+      "GW_TEMP_LOWK",
+      "GW_TEMP_HIGHK",
+      "GW_HUMIDITY",
       "GW_DAY",
       "GW_CONDITIONCODE",
       "GW_SUNRISE",

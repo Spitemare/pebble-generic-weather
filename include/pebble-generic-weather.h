@@ -46,6 +46,24 @@ typedef struct {
   int16_t temp_k;
   int16_t temp_c;
   int16_t temp_f;
+
+  //! "Feels like" temp in degrees Kelvin
+  int16_t temp_feels_like_k;
+  int16_t temp_feels_like_c;
+  int16_t temp_feels_like_f;
+
+  //! Low temp in degrees Kelvin
+  int16_t temp_low_k;
+  int16_t temp_low_c;
+  int16_t temp_low_f;
+
+  //! High temp in degrees Kelvin
+  int16_t temp_high_k;
+  int16_t temp_high_c;
+  int16_t temp_high_f;
+
+  //! Relative humidity
+  uint8_t humidity;
   //! day or night ?
   bool day;
   //! Condition code (see GenericWeatherConditionCode values)

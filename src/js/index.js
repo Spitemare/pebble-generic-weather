@@ -1,5 +1,3 @@
-var SunCalc = require('suncalc');
-
 var GenericWeather = function() {
   
   this._apiKey    = '';
@@ -78,7 +76,7 @@ var GenericWeather = function() {
   };
 
   this._getWeatherWU = function(coords) {
-    var url = 'http://api.wunderground.com/api/' + this._apiKey + '/conditions/q/'
+    var url = 'http://api.wunderground.com/api/' + this._apiKey + '/conditions/forecast/astronomy/q/'
       + coords.latitude + ',' + coords.longitude + '.json';
 
     console.log('weather: Contacting WUnderground.com...');
@@ -120,18 +118,33 @@ var GenericWeather = function() {
           condition = conditions.Unknown;
         }
 
-        var times = SunCalc.getTimes(new Date(), coords.latitude, coords.longitude);
-        var temp = this._feelsLike ? parseFloat(json.current_observation.feelslike_c) : json.current_observation.temp_c;
+        var times = json.sun_phase;
+        var sunrise = new Date();
+        sunrise.setHours(parseInt(times.sunrise.hour), parseInt(times.sunrise.minute), 0, 0);
+        var sunset = new Date();
+        sunset.setHours(parseInt(times.sunset.hour), parseInt(times.sunset.minute), 0, 0);
+
+        var temp = json.current_observation.temp_c;
+        var feelsLike = parseFloat(json.current_observation.feelslike_c);
+        var humidity = parseInt(json.current_observation.relative_humidity.replace(/\D/g, ''));
+
+        var forecast = json.forecast.simpleforecast.forecastday[0];
+        var tempLow = parseInt(forecast.low.celsius);
+        var tempHigh = parseInt(forecast.high.celsius);
 
         Pebble.sendAppMessage({
           'GW_REPLY': 1,
           'GW_TEMPK': Math.round(temp + 273.15),
+          'GW_FEELSLIKEK': Math.round(feelsLike + 273.15),
+          'GW_TEMP_LOWK': Math.round(tempLow + 273.15),
+          'GW_TEMP_HIGHK': Math.round(tempHigh + 273.15),
+          'GW_HUMIDITY': humidity,
           'GW_NAME': json.current_observation.display_location.city,
           'GW_DESCRIPTION': json.current_observation.weather,
           'GW_DAY': json.current_observation.icon_url.indexOf("nt_") == -1 ? 1 : 0,
           'GW_CONDITIONCODE':condition,
-          'GW_SUNRISE': Math.round(+times.sunrise/1000),
-          'GW_SUNSET': Math.round(+times.sunset/1000)
+          'GW_SUNRISE': sunrise.getTime() / 1000,
+          'GW_SUNSET': sunset.getTime() / 1000
         });
       } else {
         console.log('weather: Error fetching data (HTTP Status: ' + req.status + ')');
