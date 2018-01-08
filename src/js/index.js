@@ -111,7 +111,7 @@ var GenericWeather = function() {
           condition = conditions.Thunderstorm;
         }
         else if(condition === 'snow' || condition === 'sleet' || condition === 'flurries'){
-          condition = conditions.Thunderstorm;
+          condition = conditions.Snow;
         }
         else if(condition === 'fog' || condition === 'hazy'){
           condition = conditions.Mist;
